@@ -1,7 +1,6 @@
 package com.vdt.mychat.chat;
 
 import lombok.*;
-
 import java.time.LocalDateTime;
 
 @Getter
@@ -16,4 +15,5 @@ public class ChatResponse {
     private String content;
 
     private LocalDateTime sentAt;
+
 }
