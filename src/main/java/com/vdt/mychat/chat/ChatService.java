@@ -11,9 +11,9 @@ public class ChatService {
 
     private final ChatRepository chatRepository;
 
-    public ChatResponse builder(ChatRequest request) {
+    public ChatResponse saveAndBuildResponse(ChatRequest request, String senderName) {
         ChatMessage message = ChatMessage.builder()
-                .sender(request.getSender())
+                .sender(senderName)
                 .content(request.getContent())
                 .messageType(MessageType.CHAT)
                 .sentAt(LocalDateTime.now())
@@ -22,7 +22,7 @@ public class ChatService {
         chatRepository.save(message);
 
         return ChatResponse.builder()
-                .sender(message.getSender())
+                .sender(senderName)
                 .content(message.getContent())
                 .messageType(MessageType.CHAT)
                 .sentAt(message.getSentAt().toString())

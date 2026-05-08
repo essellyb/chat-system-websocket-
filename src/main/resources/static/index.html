@@ -7,148 +7,359 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
-            background: #f4f6f9;
+            background: #111b21;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            color: #e9edef;
+        }
+
+        /* AUTH SCREENS */
+        #authScreen {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #111b21;
+        }
+        .auth-box {
+            background: #202c33;
+            padding: 40px;
+            border-radius: 12px;
+            width: 360px;
             display: flex;
             flex-direction: column;
-            height: 100vh;
+            gap: 16px;
         }
-        header {
-            background: #0d47a1;
+        .auth-box h2 {
+            text-align: center;
+            color: #00a884;
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+        .auth-box input {
+            padding: 12px 14px;
+            border-radius: 8px;
+            border: none;
+            background: #2a3942;
+            color: #e9edef;
+            font-size: 0.95rem;
+            outline: none;
+        }
+        .auth-box input::placeholder { color: #8696a0; }
+        .auth-box button {
+            padding: 12px;
+            background: #00a884;
             color: white;
-            padding: 15px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+        .auth-box button:hover { background: #02be9a; }
+        .auth-switch {
+            text-align: center;
+            font-size: 0.85rem;
+            color: #8696a0;
+        }
+        .auth-switch span {
+            color: #00a884;
+            cursor: pointer;
+        }
+        .auth-error {
+            color: #f15c6d;
+            font-size: 0.82rem;
+            text-align: center;
+        }
+
+        /* MAIN CHAT APP */
+        #appScreen {
+            display: none;
+            flex: 1;
+            flex-direction: row;
+        }
+
+        /* SIDEBAR */
+        #sidebar {
+            width: 360px;
+            background: #111b21;
+            border-right: 1px solid #222e35;
+            display: flex;
+            flex-direction: column;
+        }
+        #sidebarHeader {
+            background: #202c33;
+            padding: 14px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        header h2 { font-size: 1.2rem; }
-        #status { font-size: 0.9rem; }
+        #sidebarHeader h3 { color: #e9edef; font-size: 1rem; }
+        #myName { color: #00a884; font-size: 0.85rem; }
 
-        #joinScreen {
+        #searchBox {
+            padding: 8px 12px;
+            background: #111b21;
+        }
+        #searchBox input {
+            width: 100%;
+            padding: 8px 14px;
+            border-radius: 8px;
+            border: none;
+            background: #202c33;
+            color: #e9edef;
+            font-size: 0.9rem;
+            outline: none;
+        }
+        #searchBox input::placeholder { color: #8696a0; }
+
+        #roomList {
+            flex: 1;
+            overflow-y: auto;
+        }
+        .room-item {
+            padding: 14px 20px;
+            cursor: pointer;
+            border-bottom: 1px solid #222e35;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .room-item:hover { background: #202c33; }
+        .room-item.active { background: #2a3942; }
+        .room-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: #00a884;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1rem;
+            color: white;
+            flex-shrink: 0;
+        }
+        .room-avatar.group { background: #0d47a1; }
+        .room-info { flex: 1; min-width: 0; }
+        .room-name { font-size: 0.95rem; color: #e9edef; }
+        .room-preview {
+            font-size: 0.8rem;
+            color: #8696a0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* MAIN CHAT AREA */
+        #chatArea {
             flex: 1;
             display: flex;
             flex-direction: column;
+            background: #0b141a;
+            min-width: 0;
+        }
+
+        #chatHeader {
+            background: #202c33;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-shrink: 0;
+        }
+        #chatHeaderAvatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #00a884;
+            display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
-        }
-        #joinScreen input {
-            padding: 10px 14px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-            width: 280px;
-            font-size: 1rem;
-        }
-        #joinScreen button {
-            padding: 10px 28px;
-            background: #0d47a1;
+            font-weight: bold;
             color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 1rem;
         }
-        #joinScreen button:hover { background: #1565c0; }
-        #joinScreen h3 { color: #0d47a1; margin-bottom: 8px; }
-
-        #chatScreen { flex: 1; display: none; flex-direction: column; }
-
-        #roomLabel {
-            background: #e8eaf6;
-            padding: 8px 20px;
-            font-size: 0.85rem;
-            color: #3949ab;
-            border-bottom: 1px solid #ddd;
-        }
+        #chatHeaderName { font-size: 1rem; color: #e9edef; }
+        #chatHeaderSub { font-size: 0.78rem; color: #8696a0; }
 
         #chatWindow {
             flex: 1;
             padding: 20px;
-            overflow-y: auto;
-            background: #fff;
+            overflow-y: scroll;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 4px;
+            min-height: 0;
         }
 
         .message {
-            padding: 10px 15px;
-            border-radius: 10px;
             max-width: 65%;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 8px 12px;
+            border-radius: 8px;
             word-wrap: break-word;
+            position: relative;
         }
         .sent {
-            background: #e3f2fd;
+            background: #005c4b;
             align-self: flex-end;
-            text-align: right;
+            border-bottom-right-radius: 2px;
         }
         .received {
-            background: #c8e6c9;
+            background: #202c33;
             align-self: flex-start;
+            border-bottom-left-radius: 2px;
         }
         .system {
-            background: #f3e5f5;
+            background: #182229;
             align-self: center;
             text-align: center;
-            font-size: 0.82rem;
-            color: #7b1fa2;
-            padding: 6px 14px;
-            border-radius: 20px;
+            font-size: 0.78rem;
+            color: #8696a0;
+            padding: 5px 12px;
+            border-radius: 8px;
             max-width: 80%;
-            box-shadow: none;
         }
-        .meta {
-            font-size: 0.75rem;
-            color: #777;
-            margin-top: 4px;
+        .msg-sender {
+            font-size: 0.78rem;
+            color: #00a884;
+            margin-bottom: 2px;
+            font-weight: bold;
+        }
+        .msg-content { font-size: 0.92rem; color: #e9edef; }
+        .msg-time {
+            font-size: 0.7rem;
+            color: #8696a0;
+            text-align: right;
+            margin-top: 3px;
         }
 
         #inputPanel {
             display: flex;
-            padding: 12px 15px;
-            background: #fafafa;
-            border-top: 1px solid #ddd;
+            padding: 12px 16px;
+            background: #202c33;
             gap: 10px;
+            align-items: center;
+            flex-shrink: 0;
         }
         #inputPanel input {
             flex: 1;
-            padding: 10px 14px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-            font-size: 1rem;
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: none;
+            background: #2a3942;
+            color: #e9edef;
+            font-size: 0.95rem;
+            outline: none;
         }
+        #inputPanel input::placeholder { color: #8696a0; }
         #inputPanel button {
             padding: 10px 20px;
-            background: #0d47a1;
+            background: #00a884;
             color: white;
             border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+        #inputPanel button:hover { background: #02be9a; }
+
+        #welcomeScreen {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #0b141a;
+            color: #8696a0;
+            font-size: 1rem;
+            flex-direction: column;
+            gap: 12px;
+        }
+        #welcomeScreen h2 { color: #e9edef; font-size: 1.5rem; }
+
+        #logoutBtn {
+            padding: 6px 14px;
+            background: transparent;
+            border: 1px solid #8696a0;
+            color: #8696a0;
             border-radius: 6px;
             cursor: pointer;
-            font-size: 1rem;
+            font-size: 0.8rem;
         }
-        #inputPanel button:hover { background: #1565c0; }
-        #inputPanel button:disabled { background: #90a4ae; cursor: not-allowed; }
+        #logoutBtn:hover { border-color: #f15c6d; color: #f15c6d; }
     </style>
 </head>
 <body>
 
-<header>
-    <h2>VDT CHAT</h2>
-    <span id="status">🔴 Disconnected</span>
-</header>
+<!-- AUTH SCREEN -->
+<div id="authScreen">
+    <!-- Login -->
+    <div class="auth-box" id="loginBox">
+        <h2>VDT CHAT</h2>
+        <input id="loginEmail" type="email" placeholder="Email" />
+        <input id="loginPassword" type="password" placeholder="Password" />
+        <div class="auth-error" id="loginError"></div>
+        <button onclick="login()">Login</button>
+        <div class="auth-switch">No account? <span onclick="showRegister()">Register</span></div>
+    </div>
 
-<div id="joinScreen">
-    <h3>Join the Chat</h3>
-    <input id="senderInput" placeholder="Your name" />
-    <button onclick="joinChat()">Join</button>
+    <!-- Register -->
+    <div class="auth-box" id="registerBox" style="display:none;">
+        <h2>Create Account</h2>
+        <input id="regName" type="text" placeholder="Full name" />
+        <input id="regEmail" type="email" placeholder="Email" />
+        <input id="regPassword" type="password" placeholder="Password" />
+        <div class="auth-error" id="registerError"></div>
+        <button onclick="register()">Register</button>
+        <div class="auth-switch">Already have an account? <span onclick="showLogin()">Login</span></div>
+    </div>
 </div>
 
-<div id="chatScreen">
-    <div id="roomLabel"></div>
-    <div id="chatWindow"></div>
-    <div id="inputPanel">
-        <input id="messageInput" placeholder="Type a message..." onkeydown="if(event.key==='Enter') sendMessage()" />
-        <button id="sendBtn" onclick="sendMessage()">Send</button>
+<!-- MAIN APP -->
+<div id="appScreen">
+    <!-- Sidebar -->
+    <div id="sidebar">
+        <div id="sidebarHeader">
+            <div>
+                <h3>VDT CHAT</h3>
+                <div id="myName"></div>
+            </div>
+            <button id="logoutBtn" onclick="logout()">Logout</button>
+        </div>
+        <div id="searchBox">
+            <input id="userSearch" placeholder="Search or start new chat" oninput="filterRooms()" />
+        </div>
+        <div id="roomList">
+            <div class="room-item active" onclick="switchRoom('public')">
+                <div class="room-avatar group">G</div>
+                <div class="room-info">
+                    <div class="room-name">Global Chat</div>
+                    <div class="room-preview" id="globalPreview">Public room</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat area -->
+    <div id="chatArea" style="display:none;">
+        <div id="chatHeader">
+            <div id="chatHeaderAvatar"></div>
+            <div>
+                <div id="chatHeaderName"></div>
+                <div id="chatHeaderSub"></div>
+            </div>
+        </div>
+        <div id="chatWindow"></div>
+        <div id="inputPanel">
+            <input id="messageInput" placeholder="Type a message..."
+                   onkeydown="if(event.key==='Enter') sendMessage()" />
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <div id="welcomeScreen">
+        <h2>Welcome to VDT Chat</h2>
+        <p>Select a chat to start messaging</p>
     </div>
 </div>
 
@@ -156,84 +367,297 @@
 <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
 <script>
     let stompClient = null;
-    let currentSender = null;
+    let currentUser = null;
+    let jwtToken = null;
+    let activeRoom = null;
+    let messages = { public: [] };
+    let privateUsers = [];
 
-    function joinChat() {
-        const sender = document.getElementById("senderInput").value.trim();
-        if (!sender) {
-            alert("Please enter your name.");
-            return;
+    // AUTH
+    function showRegister() {
+        document.getElementById("loginBox").style.display = "none";
+        document.getElementById("registerBox").style.display = "flex";
+    }
+
+    function showLogin() {
+        document.getElementById("registerBox").style.display = "none";
+        document.getElementById("loginBox").style.display = "flex";
+    }
+
+    async function register() {
+        const name = document.getElementById("regName").value.trim();
+        const email = document.getElementById("regEmail").value.trim();
+        const password = document.getElementById("regPassword").value.trim();
+        if (!name || !email || !password) return;
+
+        const res = await fetch('/api/auth/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, email, password })
+        });
+
+        if (res.ok) {
+            const data = await res.json();
+            onAuthSuccess(data);
+        } else {
+            document.getElementById("registerError").textContent = "Email already in use.";
         }
-        currentSender = sender;
+    }
+
+    async function login() {
+        const email = document.getElementById("loginEmail").value.trim();
+        const password = document.getElementById("loginPassword").value.trim();
+        if (!email || !password) return;
+
+        const res = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
+
+        if (res.ok) {
+            const data = await res.json();
+            onAuthSuccess(data);
+        } else {
+            document.getElementById("loginError").textContent = "Invalid email or password.";
+        }
+    }
+
+    function onAuthSuccess(data) {
+        jwtToken = data.token;
+        currentUser = data.name;
+        document.getElementById("authScreen").style.display = "none";
+        document.getElementById("appScreen").style.display = "flex";
+        document.getElementById("myName").textContent = currentUser;
         connect();
     }
 
+    function logout() {
+        if (stompClient) stompClient.disconnect();
+        jwtToken = null;
+        currentUser = null;
+        activeRoom = null;
+        messages = { public: [] };
+        privateUsers = [];
+        document.getElementById("appScreen").style.display = "none";
+        document.getElementById("authScreen").style.display = "flex";
+        document.getElementById("roomList").innerHTML = `
+            <div class="room-item active" onclick="switchRoom('public')">
+                <div class="room-avatar group">G</div>
+                <div class="room-info">
+                    <div class="room-name">Global Chat</div>
+                    <div class="room-preview" id="globalPreview">Public room</div>
+                </div>
+            </div>`;
+    }
+
+    // WEBSOCKET
     function connect() {
         const socket = new SockJS('/ws');
         stompClient = Stomp.over(socket);
         stompClient.debug = null;
 
-        stompClient.connect({}, () => {
-            document.getElementById("status").textContent = "🟢 Connected";
+        const headers = { Authorization: 'Bearer ' + jwtToken };
 
-            document.getElementById("joinScreen").style.display = "none";
-            document.getElementById("chatScreen").style.display = "flex";
-            document.getElementById("roomLabel").textContent = "Logged in as: " + currentSender;
-
+        stompClient.connect(headers, () => {
             stompClient.subscribe('/topic/messages', (msg) => {
                 const body = JSON.parse(msg.body);
-                handleMessage(body);
+                handlePublicMessage(body);
+            });
+
+            stompClient.subscribe('/user/queue/private', (msg) => {
+                const body = JSON.parse(msg.body);
+                handlePrivateMessage(body);
             });
 
             loadHistory();
 
             stompClient.send("/app/chat.join", {}, JSON.stringify({
-                sender: currentSender,
-                type: "JOIN"
+                messageType: "JOIN"
             }));
 
+            switchRoom('public');
+
         }, () => {
-            document.getElementById("status").textContent = "🔴 Disconnected";
+            console.log("Disconnected");
         });
     }
 
-    function handleMessage(body) {
+    // MESSAGE HANDLING
+    function handlePublicMessage(body) {
         const type = body.messageType;
-
         if (type === "JOIN") {
-            showSystem(body.sender + " joined the chat.");
+            addMessage('public', { system: true, text: body.sender + " joined the chat." });
+            ensurePrivateRoom(body.sender);
         } else if (type === "LEAVE") {
-            showSystem(body.sender + " left the chat.");
+            addMessage('public', { system: true, text: body.sender + " left the chat." });
         } else {
-            const isMine = body.sender === currentSender;
-            showMessage(body.sender, body.content, body.sentAt, isMine ? "sent" : "received");
+            addMessage('public', {
+                sender: body.sender,
+                content: body.content,
+                time: body.sentAt,
+                mine: body.sender === currentUser
+            });
+            updatePreview('public', body.sender + ": " + body.content);
+        }
+        if (activeRoom === 'public') renderMessages();
+    }
+
+    function handlePrivateMessage(body) {
+        const other = body.sender === currentUser ? body.recipient : body.sender;
+        ensurePrivateRoom(other);
+        addMessage(other, {
+            sender: body.sender,
+            content: body.content,
+            time: body.sentAt,
+            mine: body.sender === currentUser
+        });
+        updatePreview(other, body.sender + ": " + body.content);
+        if (activeRoom === other) renderMessages();
+    }
+
+    function addMessage(room, msg) {
+        if (!messages[room]) messages[room] = [];
+        messages[room].push(msg);
+    }
+
+    function ensurePrivateRoom(name) {
+        if (name === currentUser) return;
+        if (!messages[name]) {
+            messages[name] = [];
+            privateUsers.push(name);
+            addPrivateRoomToSidebar(name);
         }
     }
 
+    function addPrivateRoomToSidebar(name) {
+        const existing = document.getElementById("room-" + name);
+        if (existing) return;
+
+        const div = document.createElement("div");
+        div.className = "room-item";
+        div.id = "room-" + name;
+        div.onclick = () => switchRoom(name);
+        div.innerHTML = `
+            <div class="room-avatar">${name.charAt(0).toUpperCase()}</div>
+            <div class="room-info">
+                <div class="room-name">${name}</div>
+                <div class="room-preview" id="preview-${name}">No messages yet</div>
+            </div>`;
+        document.getElementById("roomList").appendChild(div);
+    }
+
+    function updatePreview(room, text) {
+        const id = room === 'public' ? 'globalPreview' : 'preview-' + room;
+        const el = document.getElementById(id);
+        if (el) el.textContent = text;
+    }
+
+    // ROOM SWITCHING
+    function switchRoom(room) {
+        activeRoom = room;
+
+        document.querySelectorAll('.room-item').forEach(el => el.classList.remove('active'));
+        const roomEl = room === 'public'
+            ? document.querySelector('.room-item')
+            : document.getElementById('room-' + room);
+        if (roomEl) roomEl.classList.add('active');
+
+        document.getElementById("welcomeScreen").style.display = "none";
+        document.getElementById("chatArea").style.display = "flex";
+
+        const avatar = document.getElementById("chatHeaderAvatar");
+        const nameEl = document.getElementById("chatHeaderName");
+        const subEl = document.getElementById("chatHeaderSub");
+
+        if (room === 'public') {
+            avatar.textContent = "G";
+            avatar.style.background = "#0d47a1";
+            nameEl.textContent = "Global Chat";
+            subEl.textContent = "Everyone can see this";
+        } else {
+            avatar.textContent = room.charAt(0).toUpperCase();
+            avatar.style.background = "#00a884";
+            nameEl.textContent = room;
+            subEl.textContent = "Private conversation";
+        }
+
+        renderMessages();
+    }
+
+    function renderMessages() {
+        const chatWindow = document.getElementById("chatWindow");
+        chatWindow.innerHTML = "";
+        const msgs = messages[activeRoom] || [];
+        msgs.forEach(msg => {
+            if (msg.system) {
+                showSystem(msg.text);
+            } else {
+                showMessage(msg.sender, msg.content, msg.time, msg.mine ? "sent" : "received");
+            }
+        });
+    }
+
+    // SENDING
     function sendMessage() {
         const content = document.getElementById("messageInput").value.trim();
-        if (stompClient && content) {
+        if (!stompClient || !content) return;
+
+        if (activeRoom === 'public') {
             stompClient.send("/app/chat", {}, JSON.stringify({
-                sender: currentSender,
                 content: content,
-                type: "CHAT"
+                messageType: "CHAT"
             }));
-            document.getElementById("messageInput").value = "";
+        } else {
+            stompClient.send("/app/private", {}, JSON.stringify({
+                recipient: activeRoom,
+                content: content
+            }));
         }
+
+        document.getElementById("messageInput").value = "";
     }
 
+    // HISTORY
+    function loadHistory() {
+        fetch('/api/history', {
+            headers: { Authorization: 'Bearer ' + jwtToken }
+        })
+        .then(res => res.json())
+        .then(msgs => {
+            msgs.forEach(msg => {
+                addMessage('public', {
+                    sender: msg.sender,
+                    content: msg.content,
+                    time: msg.sentAt,
+                    mine: msg.sender === currentUser
+                });
+            });
+            if (activeRoom === 'public') renderMessages();
+        });
+    }
+
+    // SEARCH
+    function filterRooms() {
+        const query = document.getElementById("userSearch").value.toLowerCase();
+        document.querySelectorAll('.room-item').forEach(item => {
+            const name = item.querySelector('.room-name').textContent.toLowerCase();
+            item.style.display = name.includes(query) ? 'flex' : 'none';
+        });
+    }
+
+    // DISPLAY
     function parseTimestamp(time) {
         if (!time) return "";
         if (Array.isArray(time)) {
-            const date = new Date(time[0], time[1] - 1, time[2], time[3], time[4], time[5]);
-            return date.toLocaleTimeString();
+            return new Date(time[0], time[1] - 1, time[2], time[3], time[4], time[5]).toLocaleTimeString();
         }
         return new Date(time).toLocaleTimeString();
     }
 
     function scrollToBottom() {
         const chatWindow = document.getElementById("chatWindow");
-        setTimeout(() => { chatWindow.scrollTop = chatWindow.scrollHeight; }, 0);
+        setTimeout(() => { chatWindow.scrollTop = chatWindow.scrollHeight; }, 50);
     }
 
     function showMessage(sender, content, time, cssClass) {
@@ -241,7 +665,10 @@
         const div = document.createElement("div");
         div.className = "message " + cssClass;
         const timeStr = parseTimestamp(time);
-        div.innerHTML = `<strong>${sender}</strong><br>${content}<div class="meta">${timeStr}</div>`;
+        div.innerHTML = `
+            <div class="msg-sender">${cssClass === 'received' ? sender : 'You'}</div>
+            <div class="msg-content">${content}</div>
+            <div class="msg-time">${timeStr}</div>`;
         chatWindow.appendChild(div);
         scrollToBottom();
     }
@@ -253,21 +680,6 @@
         div.textContent = text;
         chatWindow.appendChild(div);
         scrollToBottom();
-    }
-
-    function loadHistory() {
-        fetch('/api/history')
-            .then(res => res.json())
-            .then(messages => {
-                messages.forEach(msg => {
-                    if (msg.type === 'JOIN' || msg.type === 'LEAVE') {
-                        showSystem(msg.sender + (msg.type === 'JOIN' ? ' joined the chat.' : ' left the chat.'));
-                    } else {
-                        const isMine = msg.sender === currentSender;
-                        showMessage(msg.sender, msg.content, msg.sentAt, isMine ? 'sent' : 'received');
-                    }
-                });
-            });
     }
 </script>
 </body>
