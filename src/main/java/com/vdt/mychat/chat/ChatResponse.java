@@ -15,8 +15,8 @@ public class ChatResponse {
 
     private String content;
 
-    private MessageType type;
+    private MessageType messageType;
 
-    private LocalDateTime sentAt;
+    private String sentAt;
 
 }

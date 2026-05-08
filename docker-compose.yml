@@ -1,0 +1,10 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: mychat-db
+    environment:
+      POSTGRES_DB: mychat
+      POSTGRES_USER: mychat_user
+      POSTGRES_PASSWORD: mychat_pass
+    ports:
+      - "5432:5432"

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>MyChat</title>
+    <title>VDT CHAT</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
@@ -23,7 +23,6 @@
         header h2 { font-size: 1.2rem; }
         #status { font-size: 0.9rem; }
 
-        /* Join screen */
         #joinScreen {
             flex: 1;
             display: flex;
@@ -51,7 +50,6 @@
         #joinScreen button:hover { background: #1565c0; }
         #joinScreen h3 { color: #0d47a1; margin-bottom: 8px; }
 
-        /* Chat screen */
         #chatScreen { flex: 1; display: none; flex-direction: column; }
 
         #roomLabel {
@@ -135,18 +133,16 @@
 <body>
 
 <header>
-    <h2>MyChat</h2>
+    <h2>VDT CHAT</h2>
     <span id="status">🔴 Disconnected</span>
 </header>
 
-<!-- Join Screen -->
 <div id="joinScreen">
     <h3>Join the Chat</h3>
     <input id="senderInput" placeholder="Your name" />
     <button onclick="joinChat()">Join</button>
 </div>
 
-<!-- Chat Screen -->
 <div id="chatScreen">
     <div id="roomLabel"></div>
     <div id="chatWindow"></div>
@@ -180,18 +176,17 @@
         stompClient.connect({}, () => {
             document.getElementById("status").textContent = "🟢 Connected";
 
-            // Switch screens
             document.getElementById("joinScreen").style.display = "none";
             document.getElementById("chatScreen").style.display = "flex";
             document.getElementById("roomLabel").textContent = "Logged in as: " + currentSender;
 
-            // Subscribe to the public topic
             stompClient.subscribe('/topic/messages', (msg) => {
                 const body = JSON.parse(msg.body);
                 handleMessage(body);
             });
 
-            // Send join event to server
+            loadHistory();
+
             stompClient.send("/app/chat.join", {}, JSON.stringify({
                 sender: currentSender,
                 type: "JOIN"
@@ -203,7 +198,7 @@
     }
 
     function handleMessage(body) {
-        const type = body.type;
+        const type = body.messageType;
 
         if (type === "JOIN") {
             showSystem(body.sender + " joined the chat.");
@@ -227,14 +222,28 @@
         }
     }
 
+    function parseTimestamp(time) {
+        if (!time) return "";
+        if (Array.isArray(time)) {
+            const date = new Date(time[0], time[1] - 1, time[2], time[3], time[4], time[5]);
+            return date.toLocaleTimeString();
+        }
+        return new Date(time).toLocaleTimeString();
+    }
+
+    function scrollToBottom() {
+        const chatWindow = document.getElementById("chatWindow");
+        setTimeout(() => { chatWindow.scrollTop = chatWindow.scrollHeight; }, 0);
+    }
+
     function showMessage(sender, content, time, cssClass) {
         const chatWindow = document.getElementById("chatWindow");
         const div = document.createElement("div");
         div.className = "message " + cssClass;
-        const timeStr = time ? new Date(time).toLocaleTimeString() : "";
+        const timeStr = parseTimestamp(time);
         div.innerHTML = `<strong>${sender}</strong><br>${content}<div class="meta">${timeStr}</div>`;
         chatWindow.appendChild(div);
-        chatWindow.scrollTop = chatWindow.scrollHeight;
+        scrollToBottom();
     }
 
     function showSystem(text) {
@@ -243,7 +252,22 @@
         div.className = "message system";
         div.textContent = text;
         chatWindow.appendChild(div);
-        chatWindow.scrollTop = chatWindow.scrollHeight;
+        scrollToBottom();
+    }
+
+    function loadHistory() {
+        fetch('/api/history')
+            .then(res => res.json())
+            .then(messages => {
+                messages.forEach(msg => {
+                    if (msg.type === 'JOIN' || msg.type === 'LEAVE') {
+                        showSystem(msg.sender + (msg.type === 'JOIN' ? ' joined the chat.' : ' left the chat.'));
+                    } else {
+                        const isMine = msg.sender === currentSender;
+                        showMessage(msg.sender, msg.content, msg.sentAt, isMine ? 'sent' : 'received');
+                    }
+                });
+            });
     }
 </script>
 </body>
