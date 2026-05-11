@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@1/index.js"></script>
     <meta charset="UTF-8">
     <title>VDT CHAT</title>
     <style>
@@ -13,8 +14,6 @@
             overflow: hidden;
             color: #e9edef;
         }
-
-        /* AUTH SCREENS */
         #authScreen {
             flex: 1;
             display: flex;
@@ -31,269 +30,61 @@
             flex-direction: column;
             gap: 16px;
         }
-        .auth-box h2 {
-            text-align: center;
-            color: #00a884;
-            font-size: 1.5rem;
-            margin-bottom: 8px;
-        }
-        .auth-box input {
-            padding: 12px 14px;
-            border-radius: 8px;
-            border: none;
-            background: #2a3942;
-            color: #e9edef;
-            font-size: 0.95rem;
-            outline: none;
-        }
+        .auth-box h2 { text-align: center; color: #00a884; font-size: 1.5rem; margin-bottom: 8px; }
+        .auth-box input { padding: 12px 14px; border-radius: 8px; border: none; background: #2a3942; color: #e9edef; font-size: 0.95rem; outline: none; }
         .auth-box input::placeholder { color: #8696a0; }
-        .auth-box button {
-            padding: 12px;
-            background: #00a884;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: bold;
-        }
+        .auth-box button { padding: 12px; background: #00a884; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: bold; }
         .auth-box button:hover { background: #02be9a; }
-        .auth-switch {
-            text-align: center;
-            font-size: 0.85rem;
-            color: #8696a0;
-        }
-        .auth-switch span {
-            color: #00a884;
-            cursor: pointer;
-        }
-        .auth-error {
-            color: #f15c6d;
-            font-size: 0.82rem;
-            text-align: center;
-        }
-
-        /* MAIN CHAT APP */
-        #appScreen {
-            display: none;
-            flex: 1;
-            flex-direction: row;
-        }
-
-        /* SIDEBAR */
-        #sidebar {
-            width: 360px;
-            background: #111b21;
-            border-right: 1px solid #222e35;
-            display: flex;
-            flex-direction: column;
-        }
-        #sidebarHeader {
-            background: #202c33;
-            padding: 14px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+        .auth-switch { text-align: center; font-size: 0.85rem; color: #8696a0; }
+        .auth-switch span { color: #00a884; cursor: pointer; }
+        .auth-error { color: #f15c6d; font-size: 0.82rem; text-align: center; }
+        #appScreen { display: none; flex: 1; flex-direction: row; }
+        #sidebar { width: 360px; background: #111b21; border-right: 1px solid #222e35; display: flex; flex-direction: column; }
+        #sidebarHeader { background: #202c33; padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; }
         #sidebarHeader h3 { color: #e9edef; font-size: 1rem; }
         #myName { color: #00a884; font-size: 0.85rem; }
-
-        #searchBox {
-            padding: 8px 12px;
-            background: #111b21;
-        }
-        #searchBox input {
-            width: 100%;
-            padding: 8px 14px;
-            border-radius: 8px;
-            border: none;
-            background: #202c33;
-            color: #e9edef;
-            font-size: 0.9rem;
-            outline: none;
-        }
+        #searchBox { padding: 8px 12px; background: #111b21; }
+        #searchBox input { width: 100%; padding: 8px 14px; border-radius: 8px; border: none; background: #202c33; color: #e9edef; font-size: 0.9rem; outline: none; }
         #searchBox input::placeholder { color: #8696a0; }
-
-        #roomList {
-            flex: 1;
-            overflow-y: auto;
-        }
-        .room-item {
-            padding: 14px 20px;
-            cursor: pointer;
-            border-bottom: 1px solid #222e35;
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }
+        #roomList { flex: 1; overflow-y: auto; }
+        .room-item { padding: 14px 20px; cursor: pointer; border-bottom: 1px solid #222e35; display: flex; align-items: center; gap: 14px; }
         .room-item:hover { background: #202c33; }
         .room-item.active { background: #2a3942; }
-        .room-avatar {
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            background: #00a884;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 1rem;
-            color: white;
-            flex-shrink: 0;
-        }
+        .room-avatar { width: 42px; height: 42px; border-radius: 50%; background: #00a884; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1rem; color: white; flex-shrink: 0; }
         .room-avatar.group { background: #0d47a1; }
         .room-info { flex: 1; min-width: 0; }
         .room-name { font-size: 0.95rem; color: #e9edef; }
-        .room-preview {
-            font-size: 0.8rem;
-            color: #8696a0;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        /* MAIN CHAT AREA */
-        #chatArea {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            background: #0b141a;
-            min-width: 0;
-        }
-
-        #chatHeader {
-            background: #202c33;
-            padding: 12px 20px;
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            flex-shrink: 0;
-        }
-        #chatHeaderAvatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: #00a884;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: white;
-        }
+        .room-preview { font-size: 0.8rem; color: #8696a0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        #chatArea { flex: 1; display: flex; flex-direction: column; background: #0b141a; min-width: 0; }
+        #chatHeader { background: #202c33; padding: 12px 20px; display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+        #chatHeaderAvatar { width: 40px; height: 40px; border-radius: 50%; background: #00a884; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; }
         #chatHeaderName { font-size: 1rem; color: #e9edef; }
         #chatHeaderSub { font-size: 0.78rem; color: #8696a0; }
-
-        #chatWindow {
-            flex: 1;
-            padding: 20px;
-            overflow-y: scroll;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            min-height: 0;
-        }
-
-        .message {
-            max-width: 65%;
-            padding: 8px 12px;
-            border-radius: 8px;
-            word-wrap: break-word;
-            position: relative;
-        }
-        .sent {
-            background: #005c4b;
-            align-self: flex-end;
-            border-bottom-right-radius: 2px;
-        }
-        .received {
-            background: #202c33;
-            align-self: flex-start;
-            border-bottom-left-radius: 2px;
-        }
-        .system {
-            background: #182229;
-            align-self: center;
-            text-align: center;
-            font-size: 0.78rem;
-            color: #8696a0;
-            padding: 5px 12px;
-            border-radius: 8px;
-            max-width: 80%;
-        }
-        .msg-sender {
-            font-size: 0.78rem;
-            color: #00a884;
-            margin-bottom: 2px;
-            font-weight: bold;
-        }
+        #chatWindow { flex: 1; padding: 20px; overflow-y: scroll; display: flex; flex-direction: column; gap: 4px; min-height: 0; }
+        .message { max-width: 65%; padding: 8px 12px; border-radius: 8px; word-wrap: break-word; position: relative; }
+        .sent { background: #005c4b; align-self: flex-end; border-bottom-right-radius: 2px; }
+        .received { background: #202c33; align-self: flex-start; border-bottom-left-radius: 2px; }
+        .system { background: #182229; align-self: center; text-align: center; font-size: 0.78rem; color: #8696a0; padding: 5px 12px; border-radius: 8px; max-width: 80%; }
+        .msg-sender { font-size: 0.78rem; color: #00a884; margin-bottom: 2px; font-weight: bold; }
         .msg-content { font-size: 0.92rem; color: #e9edef; }
-        .msg-time {
-            font-size: 0.7rem;
-            color: #8696a0;
-            text-align: right;
-            margin-top: 3px;
-        }
-
-        #inputPanel {
-            display: flex;
-            padding: 12px 16px;
-            background: #202c33;
-            gap: 10px;
-            align-items: center;
-            flex-shrink: 0;
-        }
-        #inputPanel input {
-            flex: 1;
-            padding: 10px 16px;
-            border-radius: 8px;
-            border: none;
-            background: #2a3942;
-            color: #e9edef;
-            font-size: 0.95rem;
-            outline: none;
-        }
+        .msg-time { font-size: 0.7rem; color: #8696a0; text-align: right; margin-top: 3px; }
+        #inputPanel { display: flex; padding: 12px 16px; background: #202c33; gap: 10px; align-items: center; flex-shrink: 0; }
+        #inputPanel input { flex: 1; padding: 10px 16px; border-radius: 8px; border: none; background: #2a3942; color: #e9edef; font-size: 0.95rem; outline: none; }
         #inputPanel input::placeholder { color: #8696a0; }
-        #inputPanel button {
-            padding: 10px 20px;
-            background: #00a884;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.95rem;
-        }
+        #inputPanel button { padding: 10px 20px; background: #00a884; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 0.95rem; }
         #inputPanel button:hover { background: #02be9a; }
-
-        #welcomeScreen {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #0b141a;
-            color: #8696a0;
-            font-size: 1rem;
-            flex-direction: column;
-            gap: 12px;
-        }
+        #welcomeScreen { flex: 1; display: flex; align-items: center; justify-content: center; background: #0b141a; color: #8696a0; font-size: 1rem; flex-direction: column; gap: 12px; }
         #welcomeScreen h2 { color: #e9edef; font-size: 1.5rem; }
-
-        #logoutBtn {
-            padding: 6px 14px;
-            background: transparent;
-            border: 1px solid #8696a0;
-            color: #8696a0;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.8rem;
-        }
+        #emojiBtn { background: transparent; border: none; font-size: 1.4rem; cursor: pointer; padding: 4px 8px; color: #8696a0; }
+        #emojiBtn:hover { color: #00a884; }
+        emoji-picker { position: absolute; bottom: 70px; left: 370px; z-index: 1000; --background: #233138; --border-color: #3d5a65; --indicator-color: #00a884; --input-border-color: #3d5a65; --input-font-color: #e9edef; --input-placeholder-color: #8696a0; --category-emphasis: #00a884; --text-color: #e9edef; --secondary-text-color: #8696a0; display: none; }
+        #logoutBtn { padding: 6px 14px; background: transparent; border: 1px solid #8696a0; color: #8696a0; border-radius: 6px; cursor: pointer; font-size: 0.8rem; }
         #logoutBtn:hover { border-color: #f15c6d; color: #f15c6d; }
     </style>
 </head>
 <body>
 
-<!-- AUTH SCREEN -->
 <div id="authScreen">
-    <!-- Login -->
     <div class="auth-box" id="loginBox">
         <h2>VDT CHAT</h2>
         <input id="loginEmail" type="email" placeholder="Email" />
@@ -302,8 +93,6 @@
         <button onclick="login()">Login</button>
         <div class="auth-switch">No account? <span onclick="showRegister()">Register</span></div>
     </div>
-
-    <!-- Register -->
     <div class="auth-box" id="registerBox" style="display:none;">
         <h2>Create Account</h2>
         <input id="regName" type="text" placeholder="Full name" />
@@ -315,9 +104,7 @@
     </div>
 </div>
 
-<!-- MAIN APP -->
 <div id="appScreen">
-    <!-- Sidebar -->
     <div id="sidebar">
         <div id="sidebarHeader">
             <div>
@@ -339,8 +126,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Chat area -->
     <div id="chatArea" style="display:none;">
         <div id="chatHeader">
             <div id="chatHeaderAvatar"></div>
@@ -351,12 +136,12 @@
         </div>
         <div id="chatWindow"></div>
         <div id="inputPanel">
-            <input id="messageInput" placeholder="Type a message..."
-                   onkeydown="if(event.key==='Enter') sendMessage()" />
+            <button id="emojiBtn" onclick="toggleEmojiPicker()">😊</button>
+            <emoji-picker id="emojiPicker"></emoji-picker>
+            <input id="messageInput" placeholder="Type a message..." onkeydown="if(event.key==='Enter') sendMessage()" />
             <button onclick="sendMessage()">Send</button>
         </div>
     </div>
-
     <div id="welcomeScreen">
         <h2>Welcome to VDT Chat</h2>
         <p>Select a chat to start messaging</p>
@@ -373,7 +158,6 @@
     let messages = { public: [] };
     let privateUsers = [];
 
-    // AUTH
     function showRegister() {
         document.getElementById("loginBox").style.display = "none";
         document.getElementById("registerBox").style.display = "flex";
@@ -389,13 +173,11 @@
         const email = document.getElementById("regEmail").value.trim();
         const password = document.getElementById("regPassword").value.trim();
         if (!name || !email || !password) return;
-
         const res = await fetch('/api/auth/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name, email, password })
         });
-
         if (res.ok) {
             const data = await res.json();
             onAuthSuccess(data);
@@ -408,13 +190,11 @@
         const email = document.getElementById("loginEmail").value.trim();
         const password = document.getElementById("loginPassword").value.trim();
         if (!email || !password) return;
-
         const res = await fetch('/api/auth/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password })
         });
-
         if (res.ok) {
             const data = await res.json();
             onAuthSuccess(data);
@@ -424,6 +204,8 @@
     }
 
     function onAuthSuccess(data) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("name", data.name);
         jwtToken = data.token;
         currentUser = data.name;
         document.getElementById("authScreen").style.display = "none";
@@ -433,6 +215,8 @@
     }
 
     function logout() {
+        localStorage.removeItem("token");
+        localStorage.removeItem("name");
         if (stompClient) stompClient.disconnect();
         jwtToken = null;
         currentUser = null;
@@ -451,39 +235,26 @@
             </div>`;
     }
 
-    // WEBSOCKET
     function connect() {
         const socket = new SockJS('/ws');
         stompClient = Stomp.over(socket);
         stompClient.debug = null;
-
         const headers = { Authorization: 'Bearer ' + jwtToken };
-
         stompClient.connect(headers, () => {
             stompClient.subscribe('/topic/messages', (msg) => {
                 const body = JSON.parse(msg.body);
                 handlePublicMessage(body);
             });
-
             stompClient.subscribe('/user/queue/private', (msg) => {
                 const body = JSON.parse(msg.body);
                 handlePrivateMessage(body);
             });
-
             loadHistory();
-
-            stompClient.send("/app/chat.join", {}, JSON.stringify({
-                messageType: "JOIN"
-            }));
-
+            stompClient.send("/app/chat.join", {}, JSON.stringify({ messageType: "JOIN" }));
             switchRoom('public');
-
-        }, () => {
-            console.log("Disconnected");
-        });
+        }, () => { console.log("Disconnected"); });
     }
 
-    // MESSAGE HANDLING
     function handlePublicMessage(body) {
         const type = body.messageType;
         if (type === "JOIN") {
@@ -492,18 +263,14 @@
         } else if (type === "LEAVE") {
             addMessage('public', { system: true, text: body.sender + " left the chat." });
         } else {
-            addMessage('public', {
-                sender: body.sender,
-                content: body.content,
-                time: body.sentAt,
-                mine: body.sender === currentUser
-            });
+            addMessage('public', { sender: body.sender, content: body.content, time: body.sentAt, mine: body.sender === currentUser });
             updatePreview('public', body.sender + ": " + body.content);
         }
         if (activeRoom === 'public') renderMessages();
     }
 
     function handlePrivateMessage(body) {
+        if (body.sender === currentUser && body.recipient === currentUser) return;
         const other = body.sender === currentUser ? body.recipient : body.sender;
         ensurePrivateRoom(other);
         addMessage(other, {
@@ -512,7 +279,11 @@
             time: body.sentAt,
             mine: body.sender === currentUser
         });
-        updatePreview(other, body.sender + ": " + body.content);
+        updatePreview(other,
+            body.sender === currentUser
+                ? "You: " + body.content
+                : body.sender + ": " + body.content
+        );
         if (activeRoom === other) renderMessages();
     }
 
@@ -533,7 +304,6 @@
     function addPrivateRoomToSidebar(name) {
         const existing = document.getElementById("room-" + name);
         if (existing) return;
-
         const div = document.createElement("div");
         div.className = "room-item";
         div.id = "room-" + name;
@@ -553,23 +323,16 @@
         if (el) el.textContent = text;
     }
 
-    // ROOM SWITCHING
     function switchRoom(room) {
         activeRoom = room;
-
         document.querySelectorAll('.room-item').forEach(el => el.classList.remove('active'));
-        const roomEl = room === 'public'
-            ? document.querySelector('.room-item')
-            : document.getElementById('room-' + room);
+        const roomEl = room === 'public' ? document.querySelector('.room-item') : document.getElementById('room-' + room);
         if (roomEl) roomEl.classList.add('active');
-
         document.getElementById("welcomeScreen").style.display = "none";
         document.getElementById("chatArea").style.display = "flex";
-
         const avatar = document.getElementById("chatHeaderAvatar");
         const nameEl = document.getElementById("chatHeaderName");
         const subEl = document.getElementById("chatHeaderSub");
-
         if (room === 'public') {
             avatar.textContent = "G";
             avatar.style.background = "#0d47a1";
@@ -581,7 +344,6 @@
             nameEl.textContent = room;
             subEl.textContent = "Private conversation";
         }
-
         renderMessages();
     }
 
@@ -590,54 +352,33 @@
         chatWindow.innerHTML = "";
         const msgs = messages[activeRoom] || [];
         msgs.forEach(msg => {
-            if (msg.system) {
-                showSystem(msg.text);
-            } else {
-                showMessage(msg.sender, msg.content, msg.time, msg.mine ? "sent" : "received");
-            }
+            if (msg.system) { showSystem(msg.text); }
+            else { showMessage(msg.sender, msg.content, msg.time, msg.mine ? "sent" : "received"); }
         });
     }
 
-    // SENDING
     function sendMessage() {
         const content = document.getElementById("messageInput").value.trim();
         if (!stompClient || !content) return;
-
         if (activeRoom === 'public') {
-            stompClient.send("/app/chat", {}, JSON.stringify({
-                content: content,
-                messageType: "CHAT"
-            }));
+            stompClient.send("/app/chat", {}, JSON.stringify({ content: content, messageType: "CHAT" }));
         } else {
-            stompClient.send("/app/private", {}, JSON.stringify({
-                recipient: activeRoom,
-                content: content
-            }));
+            stompClient.send("/app/private", {}, JSON.stringify({ recipient: activeRoom, content: content }));
         }
-
         document.getElementById("messageInput").value = "";
     }
 
-    // HISTORY
     function loadHistory() {
-        fetch('/api/history', {
-            headers: { Authorization: 'Bearer ' + jwtToken }
-        })
+        fetch('/api/history', { headers: { Authorization: 'Bearer ' + jwtToken } })
         .then(res => res.json())
         .then(msgs => {
             msgs.forEach(msg => {
-                addMessage('public', {
-                    sender: msg.sender,
-                    content: msg.content,
-                    time: msg.sentAt,
-                    mine: msg.sender === currentUser
-                });
+                addMessage('public', { sender: msg.sender, content: msg.content, time: msg.sentAt, mine: msg.sender === currentUser });
             });
             if (activeRoom === 'public') renderMessages();
         });
     }
 
-    // SEARCH
     function filterRooms() {
         const query = document.getElementById("userSearch").value.toLowerCase();
         document.querySelectorAll('.room-item').forEach(item => {
@@ -646,7 +387,6 @@
         });
     }
 
-    // DISPLAY
     function parseTimestamp(time) {
         if (!time) return "";
         if (Array.isArray(time)) {
@@ -680,6 +420,37 @@
         div.textContent = text;
         chatWindow.appendChild(div);
         scrollToBottom();
+    }
+
+    function toggleEmojiPicker() {
+        const picker = document.getElementById("emojiPicker");
+        picker.style.display = picker.style.display === "block" ? "none" : "block";
+    }
+
+    document.addEventListener("click", (e) => {
+        const picker = document.getElementById("emojiPicker");
+        const btn = document.getElementById("emojiBtn");
+        if (!picker.contains(e.target) && e.target !== btn) {
+            picker.style.display = "none";
+        }
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const picker = document.getElementById("emojiPicker");
+        picker.addEventListener("emoji-click", (e) => {
+            const input = document.getElementById("messageInput");
+            input.value += e.detail.unicode;
+            input.focus();
+            picker.style.display = "none";
+        });
+    });
+
+    window.onload = function() {
+        const savedToken = localStorage.getItem("token");
+        const savedName = localStorage.getItem("name");
+        if (savedToken && savedName) {
+            onAuthSuccess({ token: savedToken, name: savedName });
+        }
     }
 </script>
 </body>

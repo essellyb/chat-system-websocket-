@@ -36,7 +36,7 @@ public class AuthController {
 
         return ResponseEntity.ok(AuthResponse.builder()
                 .token(token)
-
+                .name(user.getName())
                 .build());
     }
 
@@ -53,6 +53,7 @@ public class AuthController {
 
         return ResponseEntity.ok(AuthResponse.builder()
                 .token(token)
+                .name(user.getName())
                 .build());
     }
 }

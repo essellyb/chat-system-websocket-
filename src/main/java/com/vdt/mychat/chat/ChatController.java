@@ -50,6 +50,8 @@ public class ChatController {
                 .build();
 
         messagingTemplate.convertAndSendToUser(request.getRecipient(), "/queue/private", response);
-        messagingTemplate.convertAndSendToUser(sender, "/queue/private", response);
+        if (!sender.equals(request.getRecipient())) {
+            messagingTemplate.convertAndSendToUser(sender, "/queue/private", response);
+        }
     }
 }
