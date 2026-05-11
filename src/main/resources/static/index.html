@@ -80,6 +80,9 @@
         emoji-picker { position: absolute; bottom: 70px; left: 370px; z-index: 1000; --background: #233138; --border-color: #3d5a65; --indicator-color: #00a884; --input-border-color: #3d5a65; --input-font-color: #e9edef; --input-placeholder-color: #8696a0; --category-emphasis: #00a884; --text-color: #e9edef; --secondary-text-color: #8696a0; display: none; }
         #logoutBtn { padding: 6px 14px; background: transparent; border: 1px solid #8696a0; color: #8696a0; border-radius: 6px; cursor: pointer; font-size: 0.8rem; }
         #logoutBtn:hover { border-color: #f15c6d; color: #f15c6d; }
+        .unread-badge { background: #00a884; color: white; border-radius: 50%; min-width: 20px; height: 20px; font-size: 0.72rem; font-weight: bold; display: flex; align-items: center; justify-content: center; padding: 0 5px; margin-left: auto; flex-shrink: 0; }
+        .room-item .room-info { flex: 1; min-width: 0; }
+        .room-item-inner { display: flex; align-items: center; width: 100%; gap: 14px; }
     </style>
 </head>
 <body>
@@ -123,6 +126,7 @@
                     <div class="room-name">Global Chat</div>
                     <div class="room-preview" id="globalPreview">Public room</div>
                 </div>
+                <span class="unread-badge" id="badge-public" style="display:none;"></span>
             </div>
         </div>
     </div>
@@ -211,6 +215,7 @@
         document.getElementById("authScreen").style.display = "none";
         document.getElementById("appScreen").style.display = "flex";
         document.getElementById("myName").textContent = currentUser;
+        requestNotificationPermission();
         connect();
     }
 
@@ -223,6 +228,9 @@
         activeRoom = null;
         messages = { public: [] };
         privateUsers = [];
+        unreadCounts = {};
+        totalUnread = 0;
+        document.title = 'VDT CHAT';
         document.getElementById("appScreen").style.display = "none";
         document.getElementById("authScreen").style.display = "flex";
         document.getElementById("roomList").innerHTML = `
@@ -232,6 +240,7 @@
                     <div class="room-name">Global Chat</div>
                     <div class="room-preview" id="globalPreview">Public room</div>
                 </div>
+                <span class="unread-badge" id="badge-public" style="display:none;"></span>
             </div>`;
     }
 
@@ -255,6 +264,59 @@
         }, () => { console.log("Disconnected"); });
     }
 
+    /* ================= NOTIFICATIONS ================= */
+
+    let unreadCounts = {};
+    let totalUnread = 0;
+
+    function requestNotificationPermission() {
+        if ('Notification' in window && Notification.permission === 'default') {
+            Notification.requestPermission();
+        }
+    }
+
+    function sendBrowserNotification(title, body) {
+        if ('Notification' in window && Notification.permission === 'granted' && document.hidden) {
+            const n = new Notification(title, { body, icon: '/favicon.ico', tag: title });
+            n.onclick = () => { window.focus(); n.close(); };
+        }
+    }
+
+    function incrementUnread(room) {
+        if (activeRoom === room && !document.hidden) return;
+        unreadCounts[room] = (unreadCounts[room] || 0) + 1;
+        totalUnread++;
+        updateBadge(room);
+        updateTabTitle();
+    }
+
+    function clearUnread(room) {
+        if (!unreadCounts[room]) return;
+        totalUnread -= unreadCounts[room];
+        unreadCounts[room] = 0;
+        updateBadge(room);
+        updateTabTitle();
+    }
+
+    function updateBadge(room) {
+        const badgeId = 'badge-' + (room === 'public' ? 'public' : room);
+        const badge = document.getElementById(badgeId);
+        if (!badge) return;
+        const count = unreadCounts[room] || 0;
+        if (count > 0) {
+            badge.textContent = count > 99 ? '99+' : count;
+            badge.style.display = 'flex';
+        } else {
+            badge.style.display = 'none';
+        }
+    }
+
+    function updateTabTitle() {
+        document.title = totalUnread > 0 ? `(${totalUnread}) VDT CHAT` : 'VDT CHAT';
+    }
+
+    /* ================= END NOTIFICATIONS ================= */
+
     function handlePublicMessage(body) {
         const type = body.messageType;
         if (type === "JOIN") {
@@ -265,6 +327,10 @@
         } else {
             addMessage('public', { sender: body.sender, content: body.content, time: body.sentAt, mine: body.sender === currentUser });
             updatePreview('public', body.sender + ": " + body.content);
+            if (body.sender !== currentUser) {
+                incrementUnread('public');
+                sendBrowserNotification('Global Chat', body.sender + ': ' + body.content);
+            }
         }
         if (activeRoom === 'public') renderMessages();
     }
@@ -284,6 +350,10 @@
                 ? "You: " + body.content
                 : body.sender + ": " + body.content
         );
+        if (body.sender !== currentUser) {
+            incrementUnread(other);
+            sendBrowserNotification(body.sender, body.content);
+        }
         if (activeRoom === other) renderMessages();
     }
 
@@ -313,7 +383,8 @@
             <div class="room-info">
                 <div class="room-name">${name}</div>
                 <div class="room-preview" id="preview-${name}">No messages yet</div>
-            </div>`;
+            </div>
+            <span class="unread-badge" id="badge-${name}" style="display:none;"></span>`;
         document.getElementById("roomList").appendChild(div);
     }
 
@@ -325,6 +396,7 @@
 
     function switchRoom(room) {
         activeRoom = room;
+        clearUnread(room);
         document.querySelectorAll('.room-item').forEach(el => el.classList.remove('active'));
         const roomEl = room === 'public' ? document.querySelector('.room-item') : document.getElementById('room-' + room);
         if (roomEl) roomEl.classList.add('active');
